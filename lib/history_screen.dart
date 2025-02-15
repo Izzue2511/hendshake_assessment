@@ -12,20 +12,26 @@ class HistoryScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('History'),
       ),
-      body: ListView.builder(
-        itemCount: history.length,
-        itemBuilder: (context, index) {
-          final item = history[index];
-          return ListTile(
-            title: Text(
-              item['activity']!,
-              style: TextStyle(
-                color: item['type'] == preferredType ? Colors.blue : Colors.black,
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: ListView.builder(
+          itemCount: history.length,
+          itemBuilder: (context, index) {
+            final item = history[index];
+            return Card(
+              child: ListTile(
+                title: Text(
+                  item['activity']!,
+                  style: TextStyle(
+                    color: item['type'] == preferredType ? Colors.blue : Colors.black,
+                    fontWeight: item['type'] == preferredType ? FontWeight.bold : FontWeight.normal,
+                  ),
+                ),
+                subtitle: Text('Price: ${item['price']}'),
               ),
-            ),
-            subtitle: Text('Price: ${item['price']}'),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }

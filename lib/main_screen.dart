@@ -48,6 +48,7 @@ class MainScreenState extends State<MainScreen> {
     });
   }
 
+  // Save preferences to SharedPreferences
   void savePreferences() async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setString('preferredType', preferredType ?? '');
@@ -88,43 +89,67 @@ class MainScreenState extends State<MainScreen> {
         title: const Text('Activity App'),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            DropdownButton<String>(
-              hint: const Text('Select Activity Type'),
-              value: preferredType,
-              onChanged: (newValue) {
-                setState(() {
-                  preferredType = newValue;
-                });
-                savePreferences();
-              },
-              items: activityTypes.map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-            ),
-            Text('Activity: $activity'),
-            Text('Price: $price'),
-            ElevatedButton(
-              onPressed: fetchActivity,
-              child: const Text('Next'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          HistoryScreen(history: history, preferredType: preferredType)),
-                );
-              },
-              child: const Text('History'),
-            ),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: DropdownButtonFormField<String>(
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    contentPadding: EdgeInsets.symmetric(horizontal: 12.0),
+                  ),
+                  hint: const Text('Select Activity Type'),
+                  value: preferredType,
+                  onChanged: (newValue) {
+                    setState(() {
+                      preferredType = newValue;
+                    });
+                    savePreferences();
+                  },
+                  items: activityTypes.map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Center(child: Text(value)),
+                    );
+                  }).toList(),
+                  isExpanded: true,
+                  dropdownColor: Colors.white,
+                ),
+              ),
+              const SizedBox(height: 20),
+              Text(
+                'Activity: $activity',
+                style: const TextStyle(fontSize: 18),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 10),
+              Text(
+                'Price: $price',
+                style: const TextStyle(fontSize: 16),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: fetchActivity,
+                child: const Text('Next'),
+              ),
+              const SizedBox(height: 10),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            HistoryScreen(history: history, preferredType: preferredType)),
+                  );
+                },
+                child: const Text('History'),
+              ),
+            ],
+          ),
         ),
       ),
     );
